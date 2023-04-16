@@ -1,14 +1,14 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
 from apps.common.permissions import IsTheSameUser
-from .serializers import UserUpdateSerializer
 from apps.users.models import User
+from .serializers import UserUpdateSerializer
 
 
-class UserUpdateAPIView(CreateAPIView):
+class UserUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsTheSameUser]
