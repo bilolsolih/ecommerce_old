@@ -4,7 +4,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
 from .serializers import UserRegisterSerializer
-from ...models import User
+from apps.users.models import User
 
 
 class UserRegisterAPIView(CreateAPIView):

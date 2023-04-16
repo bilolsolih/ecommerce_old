@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from apps.common.permissions import IsTheSameUser
 from .serializers import UserUpdateSerializer
-from ...models import User
+from apps.users.models import User
 
 
 class UserUpdateAPIView(CreateAPIView):

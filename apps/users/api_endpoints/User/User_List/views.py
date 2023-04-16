@@ -1,7 +1,7 @@
 from rest_framework.generics import ListAPIView
 
 from .serializers import UserListSerializer
-from ...models import User
+from apps.users.models import User
 
 
 class UserListAPIView(ListAPIView):

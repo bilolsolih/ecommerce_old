@@ -1,11 +1,11 @@
 from django.urls import path
 
-from .api_endpoints.User_Destroy.views import UserDestroyAPIView
-from .api_endpoints.User_List.views import UserListAPIView
-from .api_endpoints.User_Login_Logout.views import LoginAPIView, LogoutAPIView
-from .api_endpoints.User_Register.views import UserRegisterAPIView
-from .api_endpoints.User_Retrieve.views import UserRetrieveAPIView
-from .api_endpoints.User_Update.views import UserUpdateAPIView
+from apps.users.api_endpoints.User.User_Destroy.views import UserDestroyAPIView
+from apps.users.api_endpoints.User.User_List.views import UserListAPIView
+from apps.users.api_endpoints.User.User_Login_Logout.views import LoginAPIView, LogoutAPIView
+from apps.users.api_endpoints.User.User_Register.views import UserRegisterAPIView
+from apps.users.api_endpoints.User.User_Retrieve.views import UserRetrieveAPIView
+from apps.users.api_endpoints.User.User_Update.views import UserUpdateAPIView
 
 app_name = 'users'
 

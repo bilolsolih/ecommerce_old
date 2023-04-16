@@ -1,7 +1,7 @@
 from rest_framework.generics import DestroyAPIView
 
 from apps.common.permissions import IsTheSameUser
-from ...models import User
+from apps.users.models import User
 
 
 class UserDestroyAPIView(DestroyAPIView):
