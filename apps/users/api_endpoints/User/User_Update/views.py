@@ -4,8 +4,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 
 from apps.common.permissions import IsTheSameUser
-from apps.users.models import User
 from .serializers import UserUpdateSerializer
+from ....models import User
 
 
 class UserUpdateAPIView(UpdateAPIView):
@@ -36,5 +36,4 @@ class UserUpdateAPIView(UpdateAPIView):
             )
             user.set_password(password)
             user.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

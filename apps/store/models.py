@@ -29,7 +29,7 @@ class Subcategory(BaseModel):
         null=True
     )
     title = models.CharField(verbose_name=_('Subcategory title'), max_length=124)
-    slug = AutoSlugField(verbose_name=_('Subcategory slug'), populate_from='title', max_length=124)
+    slug = AutoSlugField(verbose_name=_('Subcategory slug'), populate_from='title', max_length=124, unique=True)
     photo = models.ImageField(verbose_name=_('Subcategory photo'), upload_to='images/store/subcategory_photos/')
 
     # items
@@ -52,7 +52,9 @@ class Item(BaseModel):
     )
     title = models.CharField(verbose_name=_('Item title'), max_length=255)
     photo = models.ImageField(verbose_name=_('Item photo'), upload_to='images/store/items/%Y/%m/%d')
-    price = models.DecimalField(verbose_name=_('Price'), max_digits=24, decimal_places=2, default=0)
+    initial_quantity = models.DecimalField(verbose_name=_('Initial quantity'), max_digits=24, decimal_places=2, default=0)
+    sold_quantity = models.DecimalField(verbose_name=_('Sold quantity'), max_digits=24, decimal_places=2, default=0)
+    price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, default=0)
     condition = models.CharField(verbose_name=_('Condition'), choices=choices.ITEM_CONDITION, max_length=3, default='bra')
     description = models.TextField(verbose_name=_('Item description'))
 
