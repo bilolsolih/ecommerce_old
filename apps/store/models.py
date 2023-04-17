@@ -5,7 +5,13 @@ from django.utils.translation import gettext_lazy as _
 from apps.common.models import BaseModel
 from . import choices
 
+"""
+Category - List, Retrieve
+Subcategory - List, Retrieve
+Item - List, Retrieve
+Brand - List, Retrieve
 
+"""
 class Category(BaseModel):
     title = models.CharField(verbose_name=_('Category title'), max_length=124)
     slug = AutoSlugField(verbose_name=_('Category slug'), populate_from='title', max_length=124)
@@ -50,17 +56,31 @@ class Item(BaseModel):
         on_delete=models.SET_NULL,
         null=True
     )
+    brand = models.ForeignKey(
+        verbose_name=_('Brand'),
+        to='store.Brand',
+        related_name='items',
+        on_delete=models.SET_NULL,
+        null=True
+    )
     title = models.CharField(verbose_name=_('Item title'), max_length=255)
     photo = models.ImageField(verbose_name=_('Item photo'), upload_to='images/store/items/%Y/%m/%d')
+    # TODO bir nechta rasm yuklasa bo'ladigan qilish kerak
+
     initial_quantity = models.DecimalField(verbose_name=_('Initial quantity'), max_digits=24, decimal_places=2, default=0)
     sold_quantity = models.DecimalField(verbose_name=_('Sold quantity'), max_digits=24, decimal_places=2, default=0)
     price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, default=0)
+    # 10-20 90$, 21-30 85$
+    # TODO PriceRange degan model qilish kerak
     condition = models.CharField(verbose_name=_('Condition'), choices=choices.ITEM_CONDITION, max_length=3, default='bra')
     description = models.TextField(verbose_name=_('Item description'))
 
     class Meta:
         verbose_name = _('Item')
         verbose_name_plural = _('Items')
+
+    def __str__(self):
+        return f"Item {self.title}"
 
 
 class Brand(BaseModel):
@@ -75,21 +95,6 @@ class Brand(BaseModel):
 
     def __str__(self):
         return f"Brand - {self.title}"
-
-
-class Supplier(BaseModel):
-    title = models.CharField(verbose_name=_('Supplier name'), max_length=255)
-    country = models.ForeignKey(verbose_name=_('Country'), to='cities_light.Country', on_delete=models.SET_NULL, null=True)
-    city = models.ForeignKey(verbose_name=_('City'), to='cities_light.City', on_delete=models.SET_NULL, null=True)
-    is_verified = models.BooleanField(verbose_name=_('Is verified?'), default=False)
-    shipping_scope = models.CharField(verbose_name=_('Shipping scope'), max_length=255)
-
-    class Meta:
-        verbose_name = _('Supplier')
-        verbose_name_plural = _('Suppliers')
-
-    def __str__(self):
-        return f"Supplier {self.title}"
 
 
 class DealAndOffer(BaseModel):
