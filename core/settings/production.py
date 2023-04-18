@@ -1,7 +1,5 @@
-from .base import *
+from .base import *  # noqa
 
 DEBUG = False
 
-ADMINS = [
-    ('BlackHoler', 'BilolMuhammadSolih@gmail.com')
-]
+ADMINS = [("BlackHoler", "BilolMuhammadSolih@gmail.com")]

@@ -1,0 +1,6 @@
+-r base.txt
+
+pre-commit==3.2.2
+
+# main packages only
+django-recaptcha==3.0.0
