@@ -1,4 +1,5 @@
 from autoslug import AutoSlugField
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -9,7 +10,7 @@ from . import choices
 
 class Category(BaseModel):
     title = models.CharField(verbose_name=_('Category title'), max_length=124)
-    # slug = AutoSlugField(verbose_name=_('Category slug'), populate_from='title', max_length=124)
+    slug = AutoSlugField(verbose_name=_('Category slug'), populate_from='title', max_length=124)
 
     # subcategories
 
@@ -30,7 +31,7 @@ class Subcategory(BaseModel):
         null=True
     )
     title = models.CharField(verbose_name=_('Subcategory title'), max_length=124)
-    # slug = AutoSlugField(verbose_name=_('Subcategory slug'), populate_from='title', max_length=124, unique=True)
+    slug = AutoSlugField(verbose_name=_('Subcategory slug'), populate_from='title', max_length=124, unique=True)
     photo = models.ImageField(verbose_name=_('Subcategory photo'), upload_to='images/store_app/subcategory_photos/')
 
     # products
@@ -79,18 +80,18 @@ class Product(BaseModel):
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
-    # def clean_fields(self, exclude=None):
-    #     if self.price_per_unit and self.price_ranges.exists():
-    #         raise ValidationError({'price_per_unit': 'You cannot have both price_per_unit and price_ranges assigned to an object at the same time!'})
-    #     super().clean_fields()
+    def clean_fields(self, exclude=None):
+        if self.price_per_unit and self.price_ranges.exists():
+            raise ValidationError({'price_per_unit': 'You cannot have both price_per_unit and price_ranges assigned to an object at the same time!'})
+        super().clean_fields()
 
-    # @property
-    # def get_ranges(self):
-    #     ranges = self.price_ranges.all()
-    #     response = dict()
-    #     for x in range(0, len(ranges)):
-    #         response[x] = {'from': ranges[x].quantity_from, 'to': ranges[x].quantity_to, 'price_per_unit': ranges[x].price_per_unit}
-    #     return response
+    @property
+    def get_ranges(self):
+        ranges = self.price_ranges.all()
+        response = dict()
+        for x in range(0, len(ranges)):
+            response[x] = {'from': ranges[x].quantity_from, 'to': ranges[x].quantity_to, 'price_per_unit': ranges[x].price_per_unit}
+        return response
 
     def __str__(self):
         return f"Product {self.title}"
@@ -107,10 +108,10 @@ class PriceRange(BaseModel):
         verbose_name_plural = _('Price ranges')
         ordering = ['quantity_from']
 
-    # def clean_fields(self, exclude=None):
-    #     if self.quantity_from >= self.quantity_to:
-    #         raise ValidationError({"quantity_from": "Quantity 'Beginning from' should be smaller than quantity 'To and including'!"})
-    # super().clean_fields()
+    def clean_fields(self, exclude=None):
+        if self.quantity_from >= self.quantity_to:
+            raise ValidationError({"quantity_from": "Quantity 'Beginning from' should be smaller than quantity 'To and including'!"})
+        super().clean_fields()
 
     # ranges = self.product.price_ranges.all()
     #

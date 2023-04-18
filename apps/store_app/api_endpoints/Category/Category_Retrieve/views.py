@@ -7,4 +7,3 @@ from ....models import Category
 class CategoryRetrieveAPIView(RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryRetrieveSerializer
-    http_method_names = ['GET']

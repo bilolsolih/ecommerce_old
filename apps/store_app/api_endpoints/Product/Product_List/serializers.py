@@ -6,8 +6,8 @@ from ....models import Product
 
 
 class ProductListSerializer(ModelSerializer):
-    category = CategoryRetrieveSerializer(many=False, read_only=True)
-    brand = BrandRetrieveSerializer(many=False, read_only=True)
+    category = CategoryRetrieveSerializer()
+    brand = BrandRetrieveSerializer()
 
     class Meta:
         model = Product

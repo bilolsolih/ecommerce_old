@@ -4,5 +4,6 @@ from ....models import Brand
 
 
 class BrandListSerializer(ModelSerializer):
-    model = Brand
-    fields = ['title']
+    class Meta:
+        model = Brand
+        fields = ['title', 'logo']
