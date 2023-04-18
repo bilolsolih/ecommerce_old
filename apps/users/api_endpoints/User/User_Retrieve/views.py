@@ -1,9 +1,9 @@
 from rest_framework.generics import RetrieveAPIView
 
-from .serializers import UserDetailSerializer
+from .serializers import UserRetrieveSerializer
 from ....models import User
 
 
 class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
-    serializer_class = UserDetailSerializer
+    serializer_class = UserRetrieveSerializer

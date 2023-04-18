@@ -15,7 +15,6 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 THIRD_PARTY_APPS = [
-    "jazzmin",
     "phonenumber_field",
     "rest_framework",
     "drf_yasg",
@@ -24,9 +23,16 @@ THIRD_PARTY_APPS = [
     "captcha",
 ]
 
-CUSTOM_APPS = ["apps.store", "apps.common", "apps.users", "apps.cart", "apps.services"]
+CUSTOM_APPS = [
+    "apps.common",
+    "apps.users",
+    "apps.cart",
+    "apps.services",
+    "apps.store_app",
+]
 
 DJANGO_APPS = [
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -35,7 +41,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-INSTALLED_APPS = THIRD_PARTY_APPS + CUSTOM_APPS + DJANGO_APPS
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
