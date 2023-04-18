@@ -1,8 +1,9 @@
 from rest_framework.serializers import ModelSerializer
 
+
 from ....models import Category
 
 
-class CategoryRetrieveSerializer(ModelSerializer):
+class CategoryListSerializer(ModelSerializer):
     model = Category
-    fields = ['title', 'slug']
+    fields = '__all__'

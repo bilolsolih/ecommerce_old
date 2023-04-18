@@ -5,4 +5,4 @@ from ....models import Brand
 
 class BrandRetrieveSerializer(ModelSerializer):
     model = Brand
-    fields = ['title', 'logo']
+    fields = ['title']

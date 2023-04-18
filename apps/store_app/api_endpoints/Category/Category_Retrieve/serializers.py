@@ -3,6 +3,6 @@ from rest_framework.serializers import ModelSerializer
 from ....models import Category
 
 
-class CategoryListSerializer(ModelSerializer):
+class CategoryRetrieveSerializer(ModelSerializer):
     model = Category
-    fields = ['title', 'slug']
+    fields = ['title']

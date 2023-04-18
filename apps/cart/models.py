@@ -26,9 +26,9 @@ class Cart(BaseModel):
 class CartEntry(BaseModel):
     cart = models.ForeignKey(verbose_name=_('Cart'), to='cart.Cart', related_name='entries', on_delete=models.CASCADE)
 
-    item = models.ForeignKey(
-        verbose_name=_('Item name'),
-        to='store.Item',
+    product = models.ForeignKey(
+        verbose_name=_('Product name'),
+        to='store_app.Product',
         related_name='cart_entries',
         on_delete=models.SET_NULL,
         null=True
@@ -40,7 +40,7 @@ class CartEntry(BaseModel):
         verbose_name_plural = _('Cart entries')
 
     def __str__(self):
-        return f"Cart item {self.id} with {self.item.title}"
+        return f"Cart product {self.id} with {self.product.title}"
 
 
 class Coupon(BaseModel):

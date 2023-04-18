@@ -5,13 +5,16 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 schema_view = get_schema_view(
-    openapi.Info(title="HR Management API", default_version='v1', ),
+    openapi.Info(title="HR Management API", default_version='v2'),
     public=True, permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/store/', include('apps.store_app.urls', namespace='store')),
     path('api/v1/users/', include('apps.users.urls', namespace='accounts')),
+    path('api/v1/cart/', include('apps.cart.urls', namespace='cart'))
+
 ]
 
 swagger_patterns = [
