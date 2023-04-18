@@ -4,9 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from apps.common.models import BaseModel
 
 
-# elasticsearch
-# custom filter
-
 # TODO thumbnail
 class Supplier(BaseModel):
     title = models.CharField(verbose_name=_('Supplier name'), max_length=255)
