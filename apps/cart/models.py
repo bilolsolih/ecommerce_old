@@ -28,7 +28,7 @@ class CartEntry(BaseModel):
 
     product = models.ForeignKey(
         verbose_name=_('Product name'),
-        to='store_app.Product',
+        to='store.Product',
         related_name='cart_entries',
         on_delete=models.SET_NULL,
         null=True
@@ -44,7 +44,7 @@ class CartEntry(BaseModel):
 
 
 class Coupon(BaseModel):
-    users = models.ManyToManyField(verbose_name=_('Users'), to='users.User', related_name='coupons', blank=True)
+    users = models.ManyToManyField(verbose_name=_('Users who used the coupon'), to='users.User', related_name='coupons', blank=True)
 
     coupon_code = models.CharField(verbose_name=_('Coupon code'), max_length=24)
     expiry_date = models.DateTimeField(verbose_name=_('Expiry date'), default=timezone.now)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.store_app.models import Category, Subcategory, Product, Brand, DealAndOffer, PriceRange, ProductPhoto
+from apps.store.models import Category, Subcategory, Product, Brand, DealAndOffer, PriceRange, ProductPhoto
 
 
 class PriceRangeInline(admin.StackedInline):

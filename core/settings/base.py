@@ -28,7 +28,7 @@ CUSTOM_APPS = [
     "apps.users",
     "apps.cart",
     "apps.services",
-    "apps.store_app",
+    "apps.store",
 ]
 
 DJANGO_APPS = [

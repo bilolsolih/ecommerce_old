@@ -25,14 +25,14 @@ class Category(BaseModel):
 class Subcategory(BaseModel):
     parent_category = models.ForeignKey(
         verbose_name=_('Parent category'),
-        to='store_app.Category',
+        to='store.Category',
         related_name='subcategories',
         on_delete=models.SET_NULL,
         null=True
     )
     title = models.CharField(verbose_name=_('Subcategory title'), max_length=124)
     slug = AutoSlugField(verbose_name=_('Subcategory slug'), populate_from='title', max_length=124, unique=True)
-    photo = models.ImageField(verbose_name=_('Subcategory photo'), upload_to='images/store_app/subcategory_photos/')
+    photo = models.ImageField(verbose_name=_('Subcategory photo'), upload_to='images/store/subcategory_photos/')
 
     # products
 
@@ -47,14 +47,14 @@ class Subcategory(BaseModel):
 class Product(BaseModel):
     category = models.ForeignKey(
         verbose_name=_('Category'),
-        to='store_app.Subcategory',
+        to='store.Subcategory',
         related_name='products',
         on_delete=models.SET_NULL,
         null=True
     )
     brand = models.ForeignKey(
         verbose_name=_('Brand'),
-        to='store_app.Brand',
+        to='store.Brand',
         related_name='products',
         on_delete=models.SET_NULL,
         null=True
@@ -98,7 +98,7 @@ class Product(BaseModel):
 
 
 class PriceRange(BaseModel):
-    product = models.ForeignKey(verbose_name=_('Related parent product'), to='store_app.Product', related_name='price_ranges', on_delete=models.CASCADE)
+    product = models.ForeignKey(verbose_name=_('Related parent product'), to='store.Product', related_name='price_ranges', on_delete=models.CASCADE)
     quantity_from = models.DecimalField(verbose_name=_('Beginning from'), max_digits=24, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     quantity_to = models.DecimalField(verbose_name=_('To and including'), max_digits=24, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, default=0, validators=[MinValueValidator(0)])
@@ -144,8 +144,8 @@ class PriceRange(BaseModel):
 
 
 class ProductPhoto(BaseModel):
-    product = models.ForeignKey(verbose_name=_('Related parent product'), to='store_app.Product', related_name='photos', on_delete=models.CASCADE)
-    photo = models.ImageField(verbose_name=_('Product photo'), upload_to='images/store_app/products/%Y/%m/%d')
+    product = models.ForeignKey(verbose_name=_('Related parent product'), to='store.Product', related_name='photos', on_delete=models.CASCADE)
+    photo = models.ImageField(verbose_name=_('Product photo'), upload_to='images/store/products/%Y/%m/%d')
 
     class Meta:
         verbose_name = _('Product photo')
@@ -154,7 +154,7 @@ class ProductPhoto(BaseModel):
 
 class Brand(BaseModel):
     title = models.CharField(verbose_name=_('Brand name'), max_length=255)
-    logo = models.ImageField(verbose_name=_('Brand logo'), upload_to='images/store_app/brand_logos/')
+    logo = models.ImageField(verbose_name=_('Brand logo'), upload_to='images/store/brand_logos/')
 
     # products
 
