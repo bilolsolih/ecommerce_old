@@ -80,10 +80,10 @@ class Product(BaseModel):
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
-    def clean_fields(self, exclude=None):
-        if self.price_per_unit and self.price_ranges.exists():
-            raise ValidationError({'price_per_unit': 'You cannot have both price_per_unit and price_ranges assigned to an object at the same time!'})
-        super().clean_fields()
+    # def clean_fields(self, exclude=None):
+    #     if self.price_per_unit and self.price_ranges.all().exists():
+    #         raise ValidationError({'price_per_unit': 'You cannot have both price_per_unit and price_ranges assigned to an object at the same time!'})
+    #     super().clean_fields()
 
     @property
     def get_ranges(self):

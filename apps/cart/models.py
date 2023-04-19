@@ -14,7 +14,7 @@ class Cart(BaseModel):
         to='cart.Coupon',
         related_name='carts',
         on_delete=models.SET_NULL,
-        null=True
+        null=True, blank=True
     )
 
     # entries
@@ -22,14 +22,28 @@ class Cart(BaseModel):
         verbose_name = _('Cart')
         verbose_name_plural = _('Carts')
 
+    def __str__(self):
+        return f"{self.user.username}'s Cart"
+
 
 class CartEntry(BaseModel):
-    cart = models.ForeignKey(verbose_name=_('Cart'), to='cart.Cart', related_name='entries', on_delete=models.CASCADE)
-
+    cart = models.ForeignKey(
+        verbose_name=_('Cart'),
+        to='cart.Cart',
+        related_name='entries',
+        on_delete=models.CASCADE
+    )
     product = models.ForeignKey(
         verbose_name=_('Product name'),
         to='store.Product',
         related_name='cart_entries',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    delivery_service = models.ForeignKey(
+        verbose_name=_('Delivery service'),
+        to='services.DeliveryService',
+        related_name='entries',
         on_delete=models.SET_NULL,
         null=True
     )
@@ -40,13 +54,14 @@ class CartEntry(BaseModel):
         verbose_name_plural = _('Cart entries')
 
     def __str__(self):
-        return f"Cart product {self.id} with {self.product.title}"
+        return f"Cart entry {self.id} with {self.product.title}"
 
 
 class Coupon(BaseModel):
     users = models.ManyToManyField(verbose_name=_('Users who used the coupon'), to='users.User', related_name='coupons', blank=True)
 
     coupon_code = models.CharField(verbose_name=_('Coupon code'), max_length=24)
+    discount = models.PositiveIntegerField(verbose_name=_('Coupon discount'), default=0)
     expiry_date = models.DateTimeField(verbose_name=_('Expiry date'), default=timezone.now)
     times_can_be_used = models.PositiveIntegerField(verbose_name=_('Times can be used'), default=1)
     times_used = models.PositiveIntegerField(verbose_name=_('Times used'), default=0)
