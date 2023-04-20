@@ -10,3 +10,7 @@ class CartEntryListAPIView(ListAPIView):
     queryset = CartEntry.objects.all()
     serializer_class = CartEntryListSerializer
     permission_classes = [IsAuthenticated, IsTheOwner]
+
+    def get_queryset(self):
+        user = self.request.user
+        self.queryset.filter(cart=user.cart)
