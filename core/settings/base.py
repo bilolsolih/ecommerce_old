@@ -18,6 +18,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "rest_framework",
     "drf_yasg",
+    "django_filters",
     "autoslug",
     "cities_light",
     "captcha",
