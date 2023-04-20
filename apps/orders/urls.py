@@ -1,13 +1,9 @@
 from django.urls import path
 
-from apps.orders.api_endpoints.Cart.Cart_Retrieve.views import \
-    CartRetrieveAPIView
-from apps.orders.api_endpoints.CartEntry.CartEntry_Create.views import \
-    CartEntryCreateAPIView
-from apps.orders.api_endpoints.CartEntry.CartEntry_Destroy.views import \
-    CartEntryDestroyAPIView
-from apps.orders.api_endpoints.CartEntry.CartEntry_List.views import \
-    CartEntryListAPIView
+from apps.orders.api_endpoints.Cart.Cart_Retrieve.views import CartRetrieveAPIView
+from apps.orders.api_endpoints.CartEntry.CartEntry_Create.views import CartEntryCreateAPIView
+from apps.orders.api_endpoints.CartEntry.CartEntry_Destroy.views import CartEntryDestroyAPIView
+from apps.orders.api_endpoints.CartEntry.CartEntry_List.views import CartEntryListAPIView
 
 app_name = "orders"
 
