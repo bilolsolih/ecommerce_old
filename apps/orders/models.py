@@ -50,6 +50,7 @@ class CartEntry(BaseModel):
     class Meta:
         verbose_name = _("cart entry")
         verbose_name_plural = _("cart entries")
+        unique_together = ("cart", "product")
 
     def __str__(self):
         return f"cart entry {self.id} with {self.product.title}"
