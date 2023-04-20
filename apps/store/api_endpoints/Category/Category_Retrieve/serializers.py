@@ -4,9 +4,11 @@ from ...Subcategory.Subcategory_Retrieve.serializers import SubcategoryRetrieveS
 from ....models import Category
 
 
+# TODO create a separate serializer to be used as nested with fewer fields
+
 class CategoryRetrieveSerializer(ModelSerializer):
     subcategories = SubcategoryRetrieveSerializer(many=True)
 
     class Meta:
         model = Category
-        fields = ['title', 'subcategories']
+        fields = ['id', 'title', 'slug', 'subcategories']

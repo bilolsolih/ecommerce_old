@@ -21,7 +21,7 @@ admin.site.login_form = LoginForm
 admin.site.login_template = "login.html"
 
 schema_view = get_schema_view(
-    openapi.Info(title="HR Management API", default_version="v2"),
+    openapi.Info(title="HR Management API", default_version="v1"),
     public=True,
     permission_classes=[permissions.AllowAny],
 )

@@ -1,12 +1,12 @@
 from rest_framework.serializers import ModelSerializer
 
 from ...Brand.Brand_Retrieve.serializers import BrandRetrieveSerializer
-from ...Category.Category_Retrieve.serializers import CategoryRetrieveSerializer
+from ...Subcategory.Subcategory_Retrieve.serializers import SubcategoryRetrieveSerializer
 from ....models import Product
 
 
 class ProductListSerializer(ModelSerializer):
-    category = CategoryRetrieveSerializer()
+    category = SubcategoryRetrieveSerializer(read_only=True)
     brand = BrandRetrieveSerializer()
 
     class Meta:

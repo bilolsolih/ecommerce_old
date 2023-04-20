@@ -7,3 +7,6 @@ from apps.users.models import User
 class UserDestroyAPIView(DestroyAPIView):
     permission_classes = [IsTheSameUser]
     queryset = User.objects.all()
+
+
+__all__ = ['UserDestroyAPIView']

@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -22,19 +23,21 @@ class Cart(BaseModel):
 
     # entries
     class Meta:
-        verbose_name = _("orders")
+        verbose_name = _("Cart")
         verbose_name_plural = _("Carts")
 
     def __str__(self):
-        return f"{self.user.username}'s orders"
+        return f"{self.user.username}'s Cart"
 
 
 class CartEntry(BaseModel):
-    cart = models.ForeignKey(verbose_name=_("cart"), to="orders.Cart", related_name="entries", on_delete=models.CASCADE)
+    cart = models.ForeignKey(
+        verbose_name=_("Parent cart"), to="orders.Cart", related_name="entries", on_delete=models.CASCADE
+    )
     product = models.ForeignKey(
         verbose_name=_("Product name"),
         to="store.Product",
-        related_name="cart_entries",
+        related_name="entries",
         on_delete=models.SET_NULL,
         null=True,
     )
@@ -53,16 +56,22 @@ class CartEntry(BaseModel):
         unique_together = ("cart", "product")
 
     def __str__(self):
-        return f"cart entry {self.id} with {self.product.title}"
+        return f"Cart entry {self.id} with {self.product.title}"
 
 
 class Coupon(BaseModel):
     users = models.ManyToManyField(
         verbose_name=_("Users who used the coupon"), to="users.User", related_name="coupons", blank=True
     )
-
     coupon_code = models.CharField(verbose_name=_("Coupon code"), max_length=24)
-    discount = models.PositiveIntegerField(verbose_name=_("Coupon discount"), default=0)
+    discount = models.PositiveIntegerField(
+        verbose_name=_("Coupon discount"),
+        default=0,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100),
+        ],
+    )
     expiry_date = models.DateTimeField(verbose_name=_("Expiry date"), default=timezone.now)
     times_can_be_used = models.PositiveIntegerField(verbose_name=_("Times can be used"), default=1)
     times_used = models.PositiveIntegerField(verbose_name=_("Times used"), default=0)

@@ -1,1 +1,0 @@
-from .CartDetail import *  # noqa
