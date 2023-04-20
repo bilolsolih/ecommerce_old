@@ -3,9 +3,8 @@ from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
 
 from apps.store.api_endpoints.Product.Product_List.filters import ProductFilter
-
-from ....models import Product
 from .serializers import ProductListSerializer
+from ....models import Product
 
 
 class ProductListAPIView(ListAPIView):
