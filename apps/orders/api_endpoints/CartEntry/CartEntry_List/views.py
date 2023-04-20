@@ -13,4 +13,7 @@ class CartEntryListAPIView(ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        self.queryset.filter(cart=user.cart)
+        self.queryset = self.queryset.filter(cart=user.cart)
+
+
+__all__ = ['CartEntryListAPIView']
