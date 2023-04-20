@@ -30,7 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/store/", include("apps.store.urls", namespace="store")),
     path("api/v1/users/", include("apps.users.urls", namespace="accounts")),
-    path("api/v1/cart/", include("apps.cart.urls", namespace="cart")),
+    path("api/v1/orders/", include("apps.orders.urls", namespace="orders")),
 ]
 
 swagger_patterns = [
