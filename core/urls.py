@@ -29,8 +29,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/store/", include("apps.store.urls", namespace="store")),
-    path("api/v1/users/", include("apps.users.urls", namespace="accounts")),
+    path("api/v1/users/", include("apps.users.urls", namespace="users")),
     path("api/v1/orders/", include("apps.orders.urls", namespace="orders")),
+    path('api/v1/services/', include('apps.services.urls', namespace='services'))
 ]
 
 swagger_patterns = [

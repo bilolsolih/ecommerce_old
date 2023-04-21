@@ -1,12 +1,12 @@
 from typing import List  # noqa F401
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.models import BaseModel
-
 from . import choices
 from .managers import CustomUserManager
 
@@ -34,9 +34,25 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []  # type: List[str]
 
+    # bought_products
+
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
 
     def __str__(self):
         return self.email
+
+
+class Rating(BaseModel):
+    user = models.ForeignKey(verbose_name=_('User who rated'), to='users.User', related_name='ratings', on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(verbose_name=_('Rated product'), to='store.Product', related_name='ratings', on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(verbose_name=_('Rating'), default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+
+    class Meta:
+        verbose_name = _('Rating')
+        verbose_name_plural = _('Ratings')
+        unique_together = ['user', 'product']
+
+    def __str__(self):
+        return f"Rating by {self.user.username} on product {self.product.title}"

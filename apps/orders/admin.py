@@ -1,18 +1,17 @@
 from django.contrib import admin
 
-from .models import Cart, CartEntry, Coupon
+from .models import Cart, CartItem, Coupon
 
-admin.site.register(CartEntry)
+admin.site.register(CartItem)
 admin.site.register(Coupon)
 
 
 class CartEntryInline(admin.StackedInline):
-    model = CartEntry
+    model = CartItem
 
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     inlines = [CartEntryInline]
-
 
 # Register your models here.

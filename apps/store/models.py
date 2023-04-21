@@ -66,15 +66,23 @@ class Product(BaseModel):
         on_delete=models.SET_NULL,
         null=True
     )
-    title = models.CharField(verbose_name=_('Product title'), max_length=255)
-    initial_quantity = models.DecimalField(verbose_name=_('Initial quantity'), max_digits=24, decimal_places=2, default=0)
-    sold_quantity = models.DecimalField(verbose_name=_('Sold quantity'), max_digits=24, decimal_places=2, default=0)
-    price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, blank=True, null=True)
+    buyers = models.ManyToManyField(
+        verbose_name=_('Buyers'),
+        to='users.User',
+        through='users.Rating',
+        related_name='bought_products',
+        blank=True
+    )
     discount = models.PositiveIntegerField(
         verbose_name=_("Product discount"),
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
+    title = models.CharField(verbose_name=_('Product title'), max_length=255)
+    initial_quantity = models.DecimalField(verbose_name=_('Initial quantity'), max_digits=24, decimal_places=2, default=0)
+    sold_quantity = models.DecimalField(verbose_name=_('Sold quantity'), max_digits=24, decimal_places=2, default=0)
+    price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, blank=True, null=True)
+
     condition = models.CharField(verbose_name=_('Condition'), choices=choices.PRODUCT_CONDITION, max_length=3, default='bra')
     description = models.TextField(verbose_name=_('Product description'))
 
