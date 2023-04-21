@@ -51,24 +51,6 @@ class OrderItem(BaseModel):
         return str(self.id)
 
 
-class Cart(BaseModel):
-    user = models.OneToOneField(verbose_name=_("The owner of the cart"), to="users.User", related_name="cart", on_delete=models.CASCADE)
-    coupon = models.ForeignKey(
-        verbose_name=_("Coupon"),
-        to="orders.Coupon",
-        related_name="carts",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-
-    # items
-    class Meta:
-        verbose_name = _("Cart")
-        verbose_name_plural = _("Carts")
-
-    def __str__(self):
-        return f"{self.user.username}'s Cart"
 
 
 class CartItem(BaseModel):
