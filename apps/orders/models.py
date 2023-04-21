@@ -39,7 +39,7 @@ class OrderItem(BaseModel):
         to="services.DeliveryService",
         related_name="order_items",
         on_delete=models.SET_NULL,
-        null=True,
+        null=True
     )
     quantity = models.PositiveIntegerField(verbose_name=_('Quantity'), default=1)
 
@@ -52,14 +52,14 @@ class OrderItem(BaseModel):
 
 
 class Cart(BaseModel):
-    user = models.OneToOneField(verbose_name=_("Customer"), to="users.User", related_name="cart", on_delete=models.CASCADE)
+    user = models.OneToOneField(verbose_name=_("The owner of the cart"), to="users.User", related_name="cart", on_delete=models.CASCADE)
     coupon = models.ForeignKey(
         verbose_name=_("Coupon"),
         to="orders.Coupon",
         related_name="carts",
         on_delete=models.SET_NULL,
         null=True,
-        blank=True,
+        blank=True
     )
 
     # items
