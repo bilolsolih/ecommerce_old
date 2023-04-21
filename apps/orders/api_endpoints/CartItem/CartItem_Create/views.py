@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.orders.models import Cart, CartItem
-
 from .serializers import CartItemCreateSerializer
 
 
@@ -25,7 +24,7 @@ class CartItemCreateAPIView(CreateAPIView):
             delivery_service = vd["delivery_service"]
             quantity = vd["quantity"]
             entry = CartItem.objects.create(
-                cart=cart[0], product=product, delivery_service=delivery_service, quantity=quantity
+                the_cart=cart[0], product=product, delivery_service=delivery_service, quantity=quantity
             )
             entry.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

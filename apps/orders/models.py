@@ -14,12 +14,16 @@ class Order(BaseModel):
         on_delete=models.SET_NULL,
         null=True
     )
-    address = models.CharField(verbose_name=_('Address'), max_length=250)
     postal_code = models.CharField(verbose_name=_('Postal code'), max_length=20)
     country = models.CharField(verbose_name=_('Country'), max_length=100)
     region = models.CharField(verbose_name=_('Region'), max_length=100)
     city = models.CharField(verbose_name=_('City'), max_length=100)
     street = models.CharField(verbose_name=_('Street'), max_length=100)
+
+    coupon = models.ForeignKey(verbose_name=_('Coupon'), to='orders.Coupon', related_name='orders', on_delete=models.SET_NULL, null=True)
+    price_before_discount = models.DecimalField(verbose_name=_('Price before discount'), max_digits=24, decimal_places=2, default=0)
+    price_after_discount = models.DecimalField(verbose_name=_('Price after discount'), max_digits=24, decimal_places=2, default=0)
+
     paid = models.BooleanField(verbose_name=_('Paid'), default=False)
 
     class Meta:
@@ -69,9 +73,26 @@ class Cart(BaseModel):
 
 class CartItem(BaseModel):
     the_cart = models.ForeignKey(verbose_name=_('Cart'), to='orders.Cart', related_name='items', on_delete=models.CASCADE)
-    the_product = models.ForeignKey(verbose_name=_("Product name"), to="store.Product", related_name="entries", on_delete=models.SET_NULL, null=True, )
-    delivery_service = models.ForeignKey(verbose_name=_("Delivery service"), to="services.DeliveryService", related_name="entries", on_delete=models.SET_NULL, null=True, )
+    the_product = models.ForeignKey(
+        verbose_name=_("Product name"),
+        to="store.Product",
+        related_name="entries",
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    delivery_service = models.ForeignKey(
+        verbose_name=_("Delivery service"),
+        to="services.DeliveryService",
+        related_name="entries",
+        on_delete=models.SET_NULL,
+        null=True
+    )
     quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=0)
+
+    class Meta:
+        verbose_name = _('Cart item')
+        verbose_name_plural = _('Cart items')
+        unique_together = ['the_cart', 'the_product']
 
     @property
     def price(self):
@@ -92,28 +113,4 @@ class CartItem(BaseModel):
     def __str__(self):
         return f"Cart entry {self.id} with {self.the_product.title}"
 
-    class Meta:
-        verbose_name = _('Cart item')
-        verbose_name_plural = _('Cart items')
-        unique_together = ['cart', 'the_product']
 
-
-class Coupon(BaseModel):
-    users = models.ManyToManyField(verbose_name=_("Users who used the coupon"), to="users.User", related_name="coupons", blank=True)
-    coupon_code = models.CharField(verbose_name=_("Coupon code"), max_length=24)
-    discount = models.PositiveIntegerField(
-        verbose_name=_("Coupon discount"),
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(100)]
-    )
-    expiry_date = models.DateTimeField(verbose_name=_("Expiry date"), default=timezone.now)
-    times_can_be_used = models.PositiveIntegerField(verbose_name=_("Times can be used"), default=1)
-    times_used = models.PositiveIntegerField(verbose_name=_("Times used"), default=0)
-    is_active = models.BooleanField(verbose_name=_("Is active?"), default=True)
-
-    class Meta:
-        verbose_name = _("Coupon")
-        verbose_name_plural = _("Coupons")
-
-    def __str__(self):
-        return f"Coupon {self.coupon_code}"
