@@ -58,7 +58,7 @@ class Cart(BaseModel):
         blank=True,
     )
 
-    # entries
+    # items
     class Meta:
         verbose_name = _("Cart")
         verbose_name_plural = _("Carts")
@@ -96,49 +96,6 @@ class CartItem(BaseModel):
         verbose_name = _('Cart item')
         verbose_name_plural = _('Cart items')
         unique_together = ['cart', 'the_product']
-
-
-class CartEntry(BaseModel):
-    cart = models.ForeignKey(verbose_name=_("Parent cart"), to="orders.Cart", related_name="entries", on_delete=models.CASCADE)
-    product = models.ForeignKey(
-        verbose_name=_("Product name"),
-        to="store.Product",
-        related_name="entries",
-        on_delete=models.SET_NULL,
-        null=True,
-    )
-    delivery_service = models.ForeignKey(
-        verbose_name=_("Delivery service"),
-        to="services.DeliveryService",
-        related_name="entries",
-        on_delete=models.SET_NULL,
-        null=True,
-    )
-    quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=0)
-
-    class Meta:
-        verbose_name = _("Cart entry")
-        verbose_name_plural = _("Cart entries")
-        unique_together = ['cart', 'product']
-
-    @property
-    def price(self):
-        if self.product.price_per_unit:
-            return self.quantity * self.product.price_per_unit
-        elif self.product.price_ranges.exists():
-            ranges = self.product.price_ranges.all().order_by('quantity_from')
-            price = None
-            for r in ranges:
-                if r.quantity_from <= self.quantity <= r.quantity_to:
-                    price = r.price_per_unit
-            if not price:
-                raise ValueError(f'There is something wrong this the price of product {self.product.title, self.product.id}')
-            return price
-        else:
-            raise ValueError(f'The product {self.product.title, self.id} doesn\'t have a price yet!')
-
-    def __str__(self):
-        return f"Cart entry {self.id} with {self.product.title}"
 
 
 class Coupon(BaseModel):
