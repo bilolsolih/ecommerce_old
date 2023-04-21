@@ -1,6 +1,6 @@
 from autoslug import AutoSlugField
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -70,6 +70,11 @@ class Product(BaseModel):
     initial_quantity = models.DecimalField(verbose_name=_('Initial quantity'), max_digits=24, decimal_places=2, default=0)
     sold_quantity = models.DecimalField(verbose_name=_('Sold quantity'), max_digits=24, decimal_places=2, default=0)
     price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, blank=True, null=True)
+    discount = models.PositiveIntegerField(
+        verbose_name=_("Product discount"),
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
     condition = models.CharField(verbose_name=_('Condition'), choices=choices.PRODUCT_CONDITION, max_length=3, default='bra')
     description = models.TextField(verbose_name=_('Product description'))
 

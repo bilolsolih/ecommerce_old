@@ -16,16 +16,27 @@ class Order(BaseModel):
     )
     address = models.CharField(verbose_name=_('Address'), max_length=250)
     postal_code = models.CharField(verbose_name=_('Postal code'), max_length=20)
+    country = models.CharField(verbose_name=_('Country'), max_length=100)
+    region = models.CharField(verbose_name=_('Region'), max_length=100)
     city = models.CharField(verbose_name=_('City'), max_length=100)
+    street = models.CharField(verbose_name=_('Street'), max_length=100)
+    paid = models.BooleanField(verbose_name=_('Paid'), default=False)
 
     class Meta:
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
 
 
-class OrderItem(models.Model):
+class OrderItem(BaseModel):
     order = models.ForeignKey(verbose_name=_('Parent order'), to='orders.Order', related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(verbose_name=_('Product'), to='store.Product', related_name='order_items', on_delete=models.CASCADE)
+    delivery_service = models.ForeignKey(
+        verbose_name=_("Delivery service"),
+        to="services.DeliveryService",
+        related_name="order_items",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     quantity = models.PositiveIntegerField(verbose_name=_('Quantity'), default=1)
 
     class Meta:
@@ -78,6 +89,22 @@ class CartEntry(BaseModel):
         verbose_name = _("Cart entry")
         verbose_name_plural = _("Cart entries")
         unique_together = ['cart', 'product']
+
+    @property
+    def price(self):
+        if self.product.price_per_unit:
+            return self.quantity * self.product.price_per_unit
+        elif self.product.price_ranges.exists():
+            ranges = self.product.price_ranges.all().order_by('quantity_from')
+            price = None
+            for r in ranges:
+                if r.quantity_from <= self.quantity <= r.quantity_to:
+                    price = r.price_per_unit
+            if not price:
+                raise ValueError(f'There is something wrong this the price of product {self.product.title, self.product.id}')
+            return price
+        else:
+            raise ValueError(f'The product {self.product.title, self.id} doesn\'t have a price yet!')
 
     def __str__(self):
         return f"Cart entry {self.id} with {self.product.title}"
