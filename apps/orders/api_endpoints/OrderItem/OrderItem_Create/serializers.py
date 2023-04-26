@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from apps.orders.models import CartEntry
+from apps.orders.models import CartItem
 
 
 class CartEntryCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CartEntry
+        model = CartItem
         fields = ["product", "delivery_service", "quantity"]
