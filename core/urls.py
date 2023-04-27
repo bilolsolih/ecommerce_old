@@ -31,7 +31,8 @@ urlpatterns = [
     path("api/v1/store/", include("apps.store.urls", namespace="store")),
     path("api/v1/users/", include("apps.users.urls", namespace="users")),
     path("api/v1/orders/", include("apps.orders.urls", namespace="orders")),
-    path('api/v1/services/', include('apps.services.urls', namespace='services'))
+    path("api/v1/services/", include("apps.services.urls", namespace="services")),
+    path("api/v1/search/", include("apps.search.urls")),
 ]
 
 swagger_patterns = [

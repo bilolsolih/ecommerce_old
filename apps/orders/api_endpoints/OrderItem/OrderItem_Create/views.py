@@ -4,13 +4,13 @@ from rest_framework.parsers import FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.orders.models import Cart, CartEntry
+from apps.orders.models import Cart, CartItem
 
 from .serializers import CartEntryCreateSerializer
 
 
 class CartEntryCreateAPIView(CreateAPIView):
-    queryset = CartEntry.objects.all()
+    queryset = CartItem.objects.all()
     serializer_class = CartEntryCreateSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = [FormParser]
@@ -24,7 +24,7 @@ class CartEntryCreateAPIView(CreateAPIView):
             product = vd["product"]
             delivery_service = vd["delivery_service"]
             quantity = vd["quantity"]
-            entry = CartEntry.objects.create(
+            entry = CartItem.objects.create(
                 cart=cart[0], product=product, delivery_service=delivery_service, quantity=quantity
             )
             entry.save()

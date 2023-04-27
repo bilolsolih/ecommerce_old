@@ -24,6 +24,7 @@ THIRD_PARTY_APPS = [
     "cities_light",
     "captcha",
     'sorl.thumbnail'
+    "django_elasticsearch_dsl",
 ]
 
 CUSTOM_APPS = [
@@ -33,6 +34,7 @@ CUSTOM_APPS = [
     "apps.services",
     "apps.store",
     'apps.cart'
+    "apps.search",
 ]
 
 DJANGO_APPS = [
@@ -176,3 +178,7 @@ AUTHENTICATION_BACKENDS = [
 
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+
+ELASTICSEARCH_DSL = {
+    "default": {"hosts": "localhost:9200"},
+}

@@ -1,13 +1,13 @@
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from ....models import CartEntry
+from ....models import CartItem
 from .permissions import IsTheOwner
 from .serializers import CartEntryListSerializer
 
 
 class CartEntryListAPIView(ListAPIView):
-    queryset = CartEntry.objects.all()
+    queryset = CartItem.objects.all()
     serializer_class = CartEntryListSerializer
     permission_classes = [IsAuthenticated, IsTheOwner]
 

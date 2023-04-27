@@ -8,7 +8,7 @@ class ProductFilter(filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ["brand", "condition"]
+        fields = ["brand", "condition", "category"]
 
     def filter_by_brands(self, queryset, name, value):
         brands = value.split(",")
