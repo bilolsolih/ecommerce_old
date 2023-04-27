@@ -1,0 +1,8 @@
+API view to send inquiry to all suppliers
+Logic to recommend products
+API view to change the currency, language, and shipping-to country
+API view for "Subscribe to our newsletter" feature
+Ability to add products to favorites
+model for Features
+API view to rate a product
+List and retrieve views for the product must get the overall rating and the number of ratings as well

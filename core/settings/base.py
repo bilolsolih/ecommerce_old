@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,6 +23,7 @@ THIRD_PARTY_APPS = [
     "autoslug",
     "cities_light",
     "captcha",
+    'sorl.thumbnail'
 ]
 
 CUSTOM_APPS = [
@@ -30,6 +32,7 @@ CUSTOM_APPS = [
     "apps.orders",
     "apps.services",
     "apps.store",
+    'apps.cart'
 ]
 
 DJANGO_APPS = [
@@ -112,6 +115,21 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
+LANGUAGES = (
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("uz", _("Uzbek")),
+    ("uk", _("Uzbek Cyrillic")),
+    ("ka", _("Karakalpak")),
+)
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+        'KEY_PREFIX': 'ecommerce-memcached'
+    }
+}
 TIME_ZONE = "Asia/Tashkent"
 
 USE_I18N = True
@@ -141,6 +159,11 @@ REST_FRAMEWORK = {
         "anon": "10/second",
         "user": "10/second",
     },
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.JSONParser'
+    ),
 }
 
 AUTH_USER_MODEL = "users.User"

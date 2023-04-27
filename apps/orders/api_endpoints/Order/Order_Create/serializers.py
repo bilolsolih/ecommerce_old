@@ -1,9 +1,9 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.orders.models import Cart
+from apps.orders.models import Order
 
 
-class CartRetrieveSerializer(ModelSerializer):
+class OrderCreateSerializer(ModelSerializer):
     class Meta:
-        model = Cart
-        fields = "__all__"
+        model = Order
+        fields = ['country', 'region', 'city', 'street', 'postal_code']

@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from sorl.thumbnail import ImageField
 
 from apps.common.models import BaseModel
 from . import choices
@@ -32,7 +33,7 @@ class Subcategory(BaseModel):
     )
     title = models.CharField(verbose_name=_('Subcategory title'), max_length=124)
     slug = AutoSlugField(verbose_name=_('Subcategory slug'), populate_from='title', max_length=124, unique=True)
-    photo = models.ImageField(verbose_name=_('Subcategory photo'), upload_to='images/store/subcategory_photos/')
+    photo = ImageField(verbose_name=_('Subcategory photo'), upload_to='images/store/subcategory_photos/')
 
     # products
 
@@ -73,15 +74,12 @@ class Product(BaseModel):
         related_name='bought_products',
         blank=True
     )
-    discount = models.PositiveIntegerField(
-        verbose_name=_("Product discount"),
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(100)]
-    )
+    features = models.ManyToManyField(verbose_name=_('Product features'), to='store.FeatureCategory', related_name='products', blank=True)
     title = models.CharField(verbose_name=_('Product title'), max_length=255)
     initial_quantity = models.DecimalField(verbose_name=_('Initial quantity'), max_digits=24, decimal_places=2, default=0)
     sold_quantity = models.DecimalField(verbose_name=_('Sold quantity'), max_digits=24, decimal_places=2, default=0)
     price_per_unit = models.DecimalField(verbose_name=_('Price per unit'), max_digits=24, decimal_places=2, blank=True, null=True)
+    discount = models.PositiveIntegerField(verbose_name=_("Discount"), default=0, validators=[MaxValueValidator(100)])
 
     condition = models.CharField(verbose_name=_('Condition'), choices=choices.PRODUCT_CONDITION, max_length=3, default='bra')
     description = models.TextField(verbose_name=_('Product description'))
@@ -94,7 +92,7 @@ class Product(BaseModel):
         verbose_name_plural = _('Products')
 
     @property
-    def get_ranges(self):
+    def get_price_before_discount(self):
         ranges = self.price_ranges.all()
         if ranges:
             response = dict()
@@ -103,6 +101,21 @@ class Product(BaseModel):
             return response
         else:
             return {'missing': 'No price ranges'}
+
+    @property
+    def get_price_after_discount(self):
+        ranges = self.price_ranges.all()
+        if ranges and self.discount:
+            response = dict()
+            for x in range(0, len(ranges)):
+                response[x] = {
+                    'from': ranges[x].quantity_from,
+                    'to': ranges[x].quantity_to,
+                    'price_per_unit': ranges[x].price_per_unit / self.discount
+                }
+            return response
+        else:
+            return {'missing': 'No price ranges or discount'}
 
     def clean_fields(self, exclude=None):
         if self.price_per_unit and self.price_ranges.exists():
@@ -130,12 +143,12 @@ class PriceRange(BaseModel):
         super().clean_fields()
 
     def __str__(self):
-        return f"Price range from {self.quantity_from} to {self.quantity_to}"
+        return f"From {self.quantity_from} to {self.quantity_to}"
 
 
 class ProductPhoto(BaseModel):
     product = models.ForeignKey(verbose_name=_('Related parent product'), to='store.Product', related_name='photos', on_delete=models.CASCADE)
-    photo = models.ImageField(verbose_name=_('Product photo'), upload_to='images/store/products/%Y/%m/%d')
+    photo = ImageField(verbose_name=_('Product photo'), upload_to='images/store/products/%Y/%m/%d')
 
     class Meta:
         verbose_name = _('Product photo')
@@ -144,7 +157,7 @@ class ProductPhoto(BaseModel):
 
 class Brand(BaseModel):
     title = models.CharField(verbose_name=_('Brand name'), max_length=255)
-    logo = models.ImageField(verbose_name=_('Brand logo'), upload_to='images/store/brand_logos/')
+    logo = ImageField(verbose_name=_('Brand logo'), upload_to='images/store/brand_logos/')
 
     # products
 
@@ -153,7 +166,25 @@ class Brand(BaseModel):
         verbose_name_plural = _('Brands')
 
     def __str__(self):
-        return f"Brand - {self.title}"
+        return self.title
+
+
+class FeatureCategory(BaseModel):
+    title = models.CharField(verbose_name=_('Feature category title'), max_length=256)
+
+    # products
+
+    class Meta:
+        verbose_name = _('Feature category')
+        verbose_name_plural = _('Feature categories')
+
+
+class Feature(BaseModel):
+    option = models.CharField(verbose_name=_('Feature option'), max_length=256)
+
+    class Meta:
+        verbose_name = _('Feature')
+        verbose_name_plural = _('Features')
 
 
 class DealAndOffer(BaseModel):
